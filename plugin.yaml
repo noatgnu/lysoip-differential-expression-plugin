@@ -1,0 +1,126 @@
+plugin:
+  id: "lysoip-differential-expression"
+  name: "Lyso-IP Differential Expression"
+  description: "Log2 fold-change and significance (limma or msqrob2, auto-selected) plus a ROAST-based whole-run experiment validity test for lyso-IP data"
+  version: "1.0.0"
+  author: "CauldronGO Team"
+  category: "lysoip-qc"
+  icon: "insights"
+  repository: "https://github.com/noatgnu/lysoip-differential-expression-plugin"
+
+runtime:
+  environments: ["r"]
+  entrypoint: "lysoip_differential_expression.R"
+
+diagram:
+  enabled: true
+
+inputs:
+  - name: "abundance_long_file"
+    label: "Protein Abundance (Long Format)"
+    type: "file"
+    required: true
+    accept: ".tsv,.txt"
+    description: "abundance_long.tsv from the Lyso-IP Ingestion plugin"
+
+  - name: "samples_file"
+    label: "Samples"
+    type: "file"
+    required: true
+    accept: ".tsv,.txt"
+    description: "samples.tsv from the Lyso-IP Ingestion plugin"
+
+  - name: "peptide_abundance_file"
+    label: "Peptide Abundance (Long Format)"
+    type: "file"
+    required: false
+    accept: ".tsv,.txt"
+    description: "peptide_abundance_long.tsv from the Lyso-IP Ingestion plugin. When given, uses msqrob2 instead of limma."
+
+  - name: "impute_method"
+    label: "msqrob2 Imputation Method"
+    type: "select"
+    required: false
+    default: "MinDet"
+    options:
+      - value: "MinDet"
+        label: "MinDet (left-censored, recommended for missing-not-at-random)"
+      - value: "knn"
+        label: "k-nearest neighbours"
+      - value: "none"
+        label: "None (complete-case aggregation only)"
+    description: "Only used when peptide-level data is given. MinDet assumes a missing value is genuinely below detection, not randomly missing."
+
+  - name: "min_completeness"
+    label: "Minimum Peptide Completeness"
+    type: "number"
+    required: false
+    default: 0.3
+    min: 0
+    max: 1
+    step: 0.05
+    description: "A peptide needs at least this fraction of replicates present in both the IP and WCL group to be used; only relevant when peptide-level data is given"
+
+  - name: "n_rotations"
+    label: "ROAST Rotations"
+    type: "number"
+    required: false
+    default: 1999
+    min: 99
+    step: 1
+    description: "Number of rotations for the ROAST experiment-validity test"
+
+  - name: "min_proteins_for_validity"
+    label: "Minimum Proteins for Validity Test"
+    type: "number"
+    required: false
+    default: 20
+    min: 1
+    step: 1
+    description: "Experiment validity is undetermined (not failed) below this many tested proteins"
+
+  - name: "validity_alpha"
+    label: "Validity Alpha"
+    type: "number"
+    required: false
+    default: 0.05
+    min: 0
+    max: 1
+    step: 0.01
+    description: "ROAST p-value threshold below which the run is considered to show real differential signal"
+
+outputs:
+  - name: "differential_expression"
+    path: "differential_expression.tsv"
+    type: "data"
+    description: "Per-protein log2 fold-change, p-value, and adjusted p-value (IP vs WCL)"
+    format: "tsv"
+
+  - name: "experiment_validity"
+    path: "experiment_validity.json"
+    type: "data"
+    description: "Whole-run ROAST validity test: n_tested, omnibus_pvalue, is_valid (true/false/null if undetermined)"
+    format: "json"
+
+execution:
+  argsMapping:
+    abundance_long_file: "--abundance_long_file"
+    samples_file: "--samples_file"
+    peptide_abundance_file: "--peptide_abundance_file"
+    impute_method: "--impute_method"
+    min_completeness: "--min_completeness"
+    n_rotations: "--n_rotations"
+    min_proteins_for_validity: "--min_proteins_for_validity"
+    validity_alpha: "--validity_alpha"
+
+  outputDir: "--output_folder"
+
+  requirements:
+    r: ">=4.0"
+    rPackagesFile: "r-packages.txt"
+
+example:
+  enabled: true
+  values:
+    abundance_long_file: "examples/abundance_long.tsv"
+    samples_file: "examples/samples.tsv"

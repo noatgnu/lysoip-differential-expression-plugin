@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Documentation</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #2196f3;
+            padding-bottom: 10px;
+            color: #1976d2;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #1976d2;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #424242;
+        }
+        h4 {
+            color: #616161;
+        }
+        a {
+            color: #2196f3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #2196f3;
+            margin: 0;
+            padding-left: 15px;
+            color: #666;
+            background: #f5f9fc;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #2196f3;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        strong {
+            font-weight: 600;
+            color: #1976d2;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+<h1 id="lyso-ip-differential-expression">Lyso-IP Differential Expression</h1>
+<h2 id="installation">Installation</h2>
+<p><a href="cauldron://install?repo=https%3A%2F%2Fgithub.com%2Fnoatgnu%2Flysoip-differential-expression-plugin">⬇️ <strong>Click here to install in Cauldron</strong></a></p>
+<blockquote>
+<p><strong>Repository</strong>: <code>https://github.com/noatgnu/lysoip-differential-expression-plugin</code></p>
+</blockquote>
+<p><strong>Manual installation:</strong></p>
+<ol>
+<li>Open Cauldron</li>
+<li>Go to <strong>Plugins</strong> → <strong>Install from Repository</strong></li>
+<li>Paste: <code>https://github.com/noatgnu/lysoip-differential-expression-plugin</code></li>
+<li>Click <strong>Install</strong></li>
+</ol>
+<p><strong>ID</strong>: <code>lysoip-differential-expression</code><br>
+<strong>Version</strong>: 1.0.0<br>
+<strong>Category</strong>: lysoip-qc<br>
+<strong>Author</strong>: CauldronGO Team</p>
+<h2 id="description">Description</h2>
+<p>Log2 fold-change and significance (limma or msqrob2, auto-selected) plus a ROAST-based whole-run experiment validity test for lyso-IP data</p>
+<h2 id="workflow-diagram">Workflow Diagram</h2>
+<pre class="mermaid">flowchart TD
+    Start([Start]) --&gt; step1
+    step1[&quot;Loading samples and abundance data&quot;]
+    step1 --&gt; step2
+    step2[&quot;Running limma differential expression&quot;]
+    step2 --&gt; step3
+    step3[&quot;Running ROAST experiment validity test&quot;]
+    step3 --&gt; step4
+    step4[&quot;Loading peptide-level abundance&quot;]
+    step4 --&gt; step5
+    step5{&quot;Gating peptides by per-group completeness&quot;}
+    step5 --&gt; step6
+    step6[&quot;Running msqrob2 differential expression&quot;]
+    step6 --&gt; step7
+    step7[&quot;Differential expression complete&quot;]
+    step7 --&gt; End([End])
+</pre>
+<h2 id="runtime">Runtime</h2>
+<ul>
+<li>
+<p><strong>Environments</strong>: <code>r</code></p>
+</li>
+<li>
+<p><strong>Entrypoint</strong>: <code>lysoip_differential_expression.R</code></p>
+</li>
+</ul>
+<h2 id="inputs">Inputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Label</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Visibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abundance_long_file</code></td>
+<td>Protein Abundance (Long Format)</td>
+<td>file</td>
+<td>Yes</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>samples_file</code></td>
+<td>Samples</td>
+<td>file</td>
+<td>Yes</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>peptide_abundance_file</code></td>
+<td>Peptide Abundance (Long Format)</td>
+<td>file</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>impute_method</code></td>
+<td>msqrob2 Imputation Method</td>
+<td>select (MinDet (left-censored, recommended for missing-not-at-random), k-nearest neighbours, None (complete-case aggregation only))</td>
+<td>No</td>
+<td>MinDet</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>min_completeness</code></td>
+<td>Minimum Peptide Completeness</td>
+<td>number (min: 0, max: 1, step: 0)</td>
+<td>No</td>
+<td>0.3</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>n_rotations</code></td>
+<td>ROAST Rotations</td>
+<td>number (min: 99, step: 1)</td>
+<td>No</td>
+<td>1999</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>min_proteins_for_validity</code></td>
+<td>Minimum Proteins for Validity Test</td>
+<td>number (min: 1, step: 1)</td>
+<td>No</td>
+<td>20</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>validity_alpha</code></td>
+<td>Validity Alpha</td>
+<td>number (min: 0, max: 1, step: 0)</td>
+<td>No</td>
+<td>0.05</td>
+<td>Always visible</td>
+</tr>
+</tbody>
+</table>
+<h3 id="input-details">Input Details</h3>
+<h4 id="protein-abundance-long-format-abundance-long-file">Protein Abundance (Long Format) (<code>abundance_long_file</code>)</h4>
+<p>abundance_long.tsv from the Lyso-IP Ingestion plugin</p>
+<h4 id="samples-samples-file">Samples (<code>samples_file</code>)</h4>
+<p>samples.tsv from the Lyso-IP Ingestion plugin</p>
+<h4 id="peptide-abundance-long-format-peptide-abundance-file">Peptide Abundance (Long Format) (<code>peptide_abundance_file</code>)</h4>
+<p>peptide_abundance_long.tsv from the Lyso-IP Ingestion plugin. When given, uses msqrob2 instead of limma.</p>
+<h4 id="msqrob2-imputation-method-impute-method">msqrob2 Imputation Method (<code>impute_method</code>)</h4>
+<p>Only used when peptide-level data is given. MinDet assumes a missing value is genuinely below detection, not randomly missing.</p>
+<ul>
+<li><strong>Options</strong>: <code>MinDet</code> (MinDet (left-censored, recommended for missing-not-at-random)), <code>knn</code> (k-nearest neighbours), <code>none</code> (None (complete-case aggregation only))</li>
+</ul>
+<h4 id="minimum-peptide-completeness-min-completeness">Minimum Peptide Completeness (<code>min_completeness</code>)</h4>
+<p>A peptide needs at least this fraction of replicates present in both the IP and WCL group to be used; only relevant when peptide-level data is given</p>
+<h4 id="roast-rotations-n-rotations">ROAST Rotations (<code>n_rotations</code>)</h4>
+<p>Number of rotations for the ROAST experiment-validity test</p>
+<h4 id="minimum-proteins-for-validity-test-min-proteins-for-validity">Minimum Proteins for Validity Test (<code>min_proteins_for_validity</code>)</h4>
+<p>Experiment validity is undetermined (not failed) below this many tested proteins</p>
+<h4 id="validity-alpha-validity-alpha">Validity Alpha (<code>validity_alpha</code>)</h4>
+<p>ROAST p-value threshold below which the run is considered to show real differential signal</p>
+<h2 id="outputs">Outputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>File</th>
+<th>Type</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>differential_expression</code></td>
+<td><code>differential_expression.tsv</code></td>
+<td>data</td>
+<td>tsv</td>
+<td>Per-protein log2 fold-change, p-value, and adjusted p-value (IP vs WCL)</td>
+</tr>
+<tr>
+<td><code>experiment_validity</code></td>
+<td><code>experiment_validity.json</code></td>
+<td>data</td>
+<td>json</td>
+<td>Whole-run ROAST validity test: n_tested, omnibus_pvalue, is_valid (true/false/null if undetermined)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><strong>R Version</strong>: &gt;=4.0</li>
+</ul>
+<h3 id="r-dependencies-external-file">R Dependencies (External File)</h3>
+<p>Dependencies are defined in: <code>r-packages.txt</code></p>
+<ul>
+<li><code>limma</code></li>
+<li><code>jsonlite</code></li>
+<li><code>QFeatures</code></li>
+<li><code>msqrob2</code></li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: When you create a custom environment for this plugin, these dependencies will be automatically installed.</p>
+</blockquote>
+<h2 id="example-data">Example Data</h2>
+<p>This plugin includes example data for testing:</p>
+<pre><code class="language-yaml">  abundance_long_file: examples/abundance_long.tsv
+  samples_file: examples/samples.tsv
+</code></pre>
+<p>Load example data by clicking the <strong>Load Example</strong> button in the UI.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="via-ui">Via UI</h3>
+<ol>
+<li>Navigate to <strong>lysoip-qc</strong> → <strong>Lyso-IP Differential Expression</strong></li>
+<li>Fill in the required inputs</li>
+<li>Click <strong>Run Analysis</strong></li>
+</ol>
+<h3 id="via-plugin-system">Via Plugin System</h3>
+<pre><code class="language-typescript">const jobId = await pluginService.executePlugin('lysoip-differential-expression', {
+  // Add parameters here
+});
+</code></pre>
+
+</body>
+</html>
