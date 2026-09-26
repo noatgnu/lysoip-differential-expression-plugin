@@ -45,7 +45,7 @@ dir.create(args$output_folder, showWarnings = FALSE, recursive = TRUE)
 
 MIN_REPLICATES <- 2
 
-# @step: Loading samples and abundance data
+# @step[id=load]: Loading samples and abundance data
 samples <- read.delim(args$samples_file, stringsAsFactors = FALSE)
 abundance <- read.delim(args$abundance_long_file, stringsAsFactors = FALSE)
 abundance <- merge(abundance, samples[, c("sample", "group")], by = "sample")
@@ -66,7 +66,32 @@ write_validity <- function(n_tested, p_value) {
 }
 
 run_limma_path <- function() {
-  # @step: Running limma differential expression
+  # @step[id=limma_gate,from=check:no]: Gating proteins by per-group replicate count
+  ip_samples <- samples$sample[samples$group == "ip"]
+  wcl_samples <- samples$sample[samples$group == "wcl"]
+  qualifying <- character(0)
+  for (protein in unique(abundance$protein)) {
+    protein_rows <- abundance[abundance$protein == protein, ]
+    ip_count <- sum(protein_rows$sample %in% ip_samples)
+    wcl_count <- sum(protein_rows$sample %in% wcl_samples)
+    if (ip_count >= MIN_REPLICATES && wcl_count >= MIN_REPLICATES) {
+      qualifying <- c(qualifying, protein)
+    }
+  }
+
+  if (length(qualifying) == 0) {
+    write.table(
+      data.frame(protein = character(0), gene = character(0), log2_fold_change = numeric(0),
+                 p_value = numeric(0), p_adjusted = numeric(0)),
+      file.path(args$output_folder, "differential_expression.tsv"),
+      sep = "\t", row.names = FALSE, quote = FALSE
+    )
+    write_validity(0, NA)
+    return(invisible(NULL))
+  }
+  abundance <- abundance[abundance$protein %in% qualifying, ]
+
+  # @step[id=limma,from=limma_gate]: Running limma differential expression
   abundance$log2_value <- log2(abundance$value + 1.0)
 
   wide <- reshape(abundance[, c("protein", "sample", "log2_value")],
@@ -94,7 +119,7 @@ run_limma_path <- function() {
   write.table(output, file.path(args$output_folder, "differential_expression.tsv"),
               sep = "\t", row.names = FALSE, quote = FALSE)
 
-  # @step: Running ROAST experiment validity test
+  # @step[id=limma_roast,from=limma]: Running ROAST experiment validity test
   roast_expr <- expr[complete.cases(expr), , drop = FALSE]
   set.seed(20260101)
   roast_result <- roast(
@@ -110,14 +135,14 @@ run_msqrob2_path <- function() {
     library(msqrob2)
   })
 
-  # @step: Loading peptide-level abundance
+  # @step[id=msqrob2_load,from=check:yes]: Loading peptide-level abundance
   peptides <- read.delim(args$peptide_abundance_file, stringsAsFactors = FALSE)
   peptides <- merge(peptides, samples[, c("sample", "group")], by = "sample")
 
   ip_samples <- samples$sample[samples$group == "ip"]
   wcl_samples <- samples$sample[samples$group == "wcl"]
 
-  # @step-if: Gating peptides by per-group completeness
+  # @step-if[id=gate,from=msqrob2_load]: Gating peptides by per-group completeness
   qualifying <- character(0)
   if (length(ip_samples) >= MIN_REPLICATES && length(wcl_samples) >= MIN_REPLICATES) {
     all_peptides <- unique(peptides$peptide)
@@ -145,7 +170,7 @@ run_msqrob2_path <- function() {
 
   long <- peptides[peptides$peptide %in% qualifying, c("peptide", "protein", "sample", "value")]
 
-  # @step: Running msqrob2 differential expression
+  # @step[id=msqrob2,from=gate]: Running msqrob2 differential expression
   wide <- reshape(long[, c("peptide", "sample", "value")], idvar = "peptide", timevar = "sample", direction = "wide")
   value_cols <- grep("^value\\.", names(wide), value = TRUE)
   sample_keys <- sub("^value\\.", "", value_cols)
@@ -169,7 +194,7 @@ run_msqrob2_path <- function() {
   }
   pe <- aggregateFeatures(pe, i = "peptideImputed", fcol = "protein", na.rm = TRUE, name = "protein")
 
-  # @step: Running ROAST experiment validity test
+  # @step[id=msqrob2_roast,from=msqrob2]: Running ROAST experiment validity test
   protein_expr <- assay(pe[["protein"]])
   protein_expr <- protein_expr[complete.cases(protein_expr), , drop = FALSE]
   roast_group <- colData(pe)$group
@@ -197,11 +222,12 @@ run_msqrob2_path <- function() {
               sep = "\t", row.names = FALSE, quote = FALSE)
 }
 
+# @step-if[id=check,from=load]: Has peptide-level data?
 if (!is.null(args$peptide_abundance_file) && nzchar(args$peptide_abundance_file)) {
   run_msqrob2_path()
 } else {
   run_limma_path()
 }
 
-# @step: Differential expression complete
+# @step[from=limma_roast+msqrob2_roast]: Differential expression complete
 cat("Differential expression complete.\n", file = stderr())

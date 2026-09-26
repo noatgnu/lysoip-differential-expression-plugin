@@ -28,21 +28,28 @@ Log2 fold-change and significance (limma or msqrob2, auto-selected) plus a ROAST
 
 ```mermaid
 flowchart TD
-    Start([Start]) --> step1
-    step1["Loading samples and abundance data"]
-    step1 --> step2
-    step2["Running limma differential expression"]
-    step2 --> step3
-    step3["Running ROAST experiment validity test"]
-    step3 --> step4
-    step4["Loading peptide-level abundance"]
-    step4 --> step5
-    step5{"Gating peptides by per-group completeness"}
-    step5 --> step6
-    step6["Running msqrob2 differential expression"]
-    step6 --> step7
-    step7["Differential expression complete"]
-    step7 --> End([End])
+    Start([Start]) --> load
+    load["Loading samples and abundance data"]
+    load --> check
+    limma_gate["Gating proteins by per-group replicate count"]
+    limma_gate --> limma
+    limma["Running limma differential expression"]
+    limma --> limma_roast
+    limma_roast["Running ROAST experiment validity test"]
+    limma_roast --> step1
+    msqrob2_load["Loading peptide-level abundance"]
+    msqrob2_load --> gate
+    gate{"Gating peptides by per-group completeness"}
+    gate --> msqrob2
+    msqrob2["Running msqrob2 differential expression"]
+    msqrob2 --> msqrob2_roast
+    msqrob2_roast["Running ROAST experiment validity test"]
+    msqrob2_roast --> step1
+    check{"Has peptide-level data?"}
+    check -->|"no"| limma_gate
+    check -->|"yes"| msqrob2_load
+    step1["Differential expression complete"]
+    step1 --> End([End])
 ```
 
 ## Runtime
@@ -59,10 +66,10 @@ flowchart TD
 | `samples_file` | Samples | file | Yes | - | Always visible |
 | `peptide_abundance_file` | Peptide Abundance (Long Format) | file | No | - | Always visible |
 | `impute_method` | msqrob2 Imputation Method | select (MinDet (left-censored, recommended for missing-not-at-random), k-nearest neighbours, None (complete-case aggregation only)) | No | MinDet | Always visible |
-| `min_completeness` | Minimum Peptide Completeness | number (min: 0, max: 1, step: 0) | No | 0.3 | Always visible |
+| `min_completeness` | Minimum Peptide Completeness | number (min: 0, max: 1, step: 0.05) | No | 0.3 | Always visible |
 | `n_rotations` | ROAST Rotations | number (min: 99, step: 1) | No | 1999 | Always visible |
 | `min_proteins_for_validity` | Minimum Proteins for Validity Test | number (min: 1, step: 1) | No | 20 | Always visible |
-| `validity_alpha` | Validity Alpha | number (min: 0, max: 1, step: 0) | No | 0.05 | Always visible |
+| `validity_alpha` | Validity Alpha | number (min: 0, max: 1, step: 0.01) | No | 0.05 | Always visible |
 
 ### Input Details
 

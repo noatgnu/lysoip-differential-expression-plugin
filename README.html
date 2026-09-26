@@ -129,21 +129,28 @@
 <p>Log2 fold-change and significance (limma or msqrob2, auto-selected) plus a ROAST-based whole-run experiment validity test for lyso-IP data</p>
 <h2 id="workflow-diagram">Workflow Diagram</h2>
 <pre class="mermaid">flowchart TD
-    Start([Start]) --&gt; step1
-    step1[&quot;Loading samples and abundance data&quot;]
-    step1 --&gt; step2
-    step2[&quot;Running limma differential expression&quot;]
-    step2 --&gt; step3
-    step3[&quot;Running ROAST experiment validity test&quot;]
-    step3 --&gt; step4
-    step4[&quot;Loading peptide-level abundance&quot;]
-    step4 --&gt; step5
-    step5{&quot;Gating peptides by per-group completeness&quot;}
-    step5 --&gt; step6
-    step6[&quot;Running msqrob2 differential expression&quot;]
-    step6 --&gt; step7
-    step7[&quot;Differential expression complete&quot;]
-    step7 --&gt; End([End])
+    Start([Start]) --&gt; load
+    load[&quot;Loading samples and abundance data&quot;]
+    load --&gt; check
+    limma_gate[&quot;Gating proteins by per-group replicate count&quot;]
+    limma_gate --&gt; limma
+    limma[&quot;Running limma differential expression&quot;]
+    limma --&gt; limma_roast
+    limma_roast[&quot;Running ROAST experiment validity test&quot;]
+    limma_roast --&gt; step1
+    msqrob2_load[&quot;Loading peptide-level abundance&quot;]
+    msqrob2_load --&gt; gate
+    gate{&quot;Gating peptides by per-group completeness&quot;}
+    gate --&gt; msqrob2
+    msqrob2[&quot;Running msqrob2 differential expression&quot;]
+    msqrob2 --&gt; msqrob2_roast
+    msqrob2_roast[&quot;Running ROAST experiment validity test&quot;]
+    msqrob2_roast --&gt; step1
+    check{&quot;Has peptide-level data?&quot;}
+    check --&gt;|&quot;no&quot;| limma_gate
+    check --&gt;|&quot;yes&quot;| msqrob2_load
+    step1[&quot;Differential expression complete&quot;]
+    step1 --&gt; End([End])
 </pre>
 <h2 id="runtime">Runtime</h2>
 <ul>
@@ -202,7 +209,7 @@
 <tr>
 <td><code>min_completeness</code></td>
 <td>Minimum Peptide Completeness</td>
-<td>number (min: 0, max: 1, step: 0)</td>
+<td>number (min: 0, max: 1, step: 0.05)</td>
 <td>No</td>
 <td>0.3</td>
 <td>Always visible</td>
@@ -226,7 +233,7 @@
 <tr>
 <td><code>validity_alpha</code></td>
 <td>Validity Alpha</td>
-<td>number (min: 0, max: 1, step: 0)</td>
+<td>number (min: 0, max: 1, step: 0.01)</td>
 <td>No</td>
 <td>0.05</td>
 <td>Always visible</td>
