@@ -40,7 +40,10 @@ flowchart TD
     msqrob2_load["Loading peptide-level abundance"]
     msqrob2_load --> gate
     gate{"Gating peptides by per-group completeness"}
+    gate --> single_feature_gate
     gate --> msqrob2
+    single_feature_gate["Dropping proteins below the minimum unique peptide count"]
+    single_feature_gate --> End([End])
     msqrob2["Running msqrob2 differential expression"]
     msqrob2 --> msqrob2_roast
     msqrob2_roast["Running ROAST experiment validity test"]
@@ -65,7 +68,7 @@ flowchart TD
 | `abundance_long_file` | Protein Abundance (Long Format) | file | Yes | - | Always visible |
 | `samples_file` | Samples | file | Yes | - | Always visible |
 | `peptide_abundance_file` | Peptide Abundance (Long Format) | file | No | - | Always visible |
-| `impute_method` | msqrob2 Imputation Method | select (MinDet (left-censored, recommended for missing-not-at-random), k-nearest neighbours, None (complete-case aggregation only)) | No | MinDet | Always visible |
+| `impute_method` | msqrob2 Imputation Method | select (MinDet (left-censored, recommended for missing-not-at-random), MinProb (left-censored, stochastic), QRILC (left-censored, quantile regression), k-nearest neighbours, Bayesian PCA, Maximum likelihood (EM algorithm), Neighbour averaging, Smallest observed value, Zero, None (complete-case aggregation only)) | No | MinDet | Always visible |
 | `min_completeness` | Minimum Peptide Completeness | number (min: 0, max: 1, step: 0.05) | No | 0.3 | Always visible |
 | `min_unique_peptides` | Minimum Unique Peptides | number (min: 1, step: 1) | No | 2 | Always visible |
 | `n_rotations` | ROAST Rotations | number (min: 99, step: 1) | No | 1999 | Always visible |
@@ -91,9 +94,9 @@ peptide_abundance_long.tsv from the Lyso-IP Ingestion plugin. When given, uses m
 
 #### msqrob2 Imputation Method (`impute_method`)
 
-Only used when peptide-level data is given. MinDet assumes a missing value is genuinely below detection, not randomly missing.
+Only used when peptide-level data is given. The left-censored methods (MinDet, MinProb, QRILC) assume a missing value is genuinely below detection, not randomly missing.
 
-- **Options**: `MinDet` (MinDet (left-censored, recommended for missing-not-at-random)), `knn` (k-nearest neighbours), `none` (None (complete-case aggregation only))
+- **Options**: `MinDet` (MinDet (left-censored, recommended for missing-not-at-random)), `MinProb` (MinProb (left-censored, stochastic)), `QRILC` (QRILC (left-censored, quantile regression)), `knn` (k-nearest neighbours), `bpca` (Bayesian PCA), `MLE` (Maximum likelihood (EM algorithm)), `nbavg` (Neighbour averaging), `min` (Smallest observed value), `zero` (Zero), `none` (None (complete-case aggregation only))
 
 #### Minimum Peptide Completeness (`min_completeness`)
 

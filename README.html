@@ -141,7 +141,10 @@
     msqrob2_load[&quot;Loading peptide-level abundance&quot;]
     msqrob2_load --&gt; gate
     gate{&quot;Gating peptides by per-group completeness&quot;}
+    gate --&gt; single_feature_gate
     gate --&gt; msqrob2
+    single_feature_gate[&quot;Dropping proteins below the minimum unique peptide count&quot;]
+    single_feature_gate --&gt; End([End])
     msqrob2[&quot;Running msqrob2 differential expression&quot;]
     msqrob2 --&gt; msqrob2_roast
     msqrob2_roast[&quot;Running ROAST experiment validity test&quot;]
@@ -201,7 +204,7 @@
 <tr>
 <td><code>impute_method</code></td>
 <td>msqrob2 Imputation Method</td>
-<td>select (MinDet (left-censored, recommended for missing-not-at-random), k-nearest neighbours, None (complete-case aggregation only))</td>
+<td>select (MinDet (left-censored, recommended for missing-not-at-random), MinProb (left-censored, stochastic), QRILC (left-censored, quantile regression), k-nearest neighbours, Bayesian PCA, Maximum likelihood (EM algorithm), Neighbour averaging, Smallest observed value, Zero, None (complete-case aggregation only))</td>
 <td>No</td>
 <td>MinDet</td>
 <td>Always visible</td>
@@ -212,6 +215,14 @@
 <td>number (min: 0, max: 1, step: 0.05)</td>
 <td>No</td>
 <td>0.3</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>min_unique_peptides</code></td>
+<td>Minimum Unique Peptides</td>
+<td>number (min: 1, step: 1)</td>
+<td>No</td>
+<td>2</td>
 <td>Always visible</td>
 </tr>
 <tr>
@@ -248,12 +259,14 @@
 <h4 id="peptide-abundance-long-format-peptide-abundance-file">Peptide Abundance (Long Format) (<code>peptide_abundance_file</code>)</h4>
 <p>peptide_abundance_long.tsv from the Lyso-IP Ingestion plugin. When given, uses msqrob2 instead of limma.</p>
 <h4 id="msqrob2-imputation-method-impute-method">msqrob2 Imputation Method (<code>impute_method</code>)</h4>
-<p>Only used when peptide-level data is given. MinDet assumes a missing value is genuinely below detection, not randomly missing.</p>
+<p>Only used when peptide-level data is given. The left-censored methods (MinDet, MinProb, QRILC) assume a missing value is genuinely below detection, not randomly missing.</p>
 <ul>
-<li><strong>Options</strong>: <code>MinDet</code> (MinDet (left-censored, recommended for missing-not-at-random)), <code>knn</code> (k-nearest neighbours), <code>none</code> (None (complete-case aggregation only))</li>
+<li><strong>Options</strong>: <code>MinDet</code> (MinDet (left-censored, recommended for missing-not-at-random)), <code>MinProb</code> (MinProb (left-censored, stochastic)), <code>QRILC</code> (QRILC (left-censored, quantile regression)), <code>knn</code> (k-nearest neighbours), <code>bpca</code> (Bayesian PCA), <code>MLE</code> (Maximum likelihood (EM algorithm)), <code>nbavg</code> (Neighbour averaging), <code>min</code> (Smallest observed value), <code>zero</code> (Zero), <code>none</code> (None (complete-case aggregation only))</li>
 </ul>
 <h4 id="minimum-peptide-completeness-min-completeness">Minimum Peptide Completeness (<code>min_completeness</code>)</h4>
 <p>A peptide needs at least this fraction of replicates present in both the IP and WCL group to be used; only relevant when peptide-level data is given</p>
+<h4 id="minimum-unique-peptides-min-unique-peptides">Minimum Unique Peptides (<code>min_unique_peptides</code>)</h4>
+<p>A protein needs at least this many distinct qualifying peptides to be tested; only relevant when peptide-level data is given</p>
 <h4 id="roast-rotations-n-rotations">ROAST Rotations (<code>n_rotations</code>)</h4>
 <p>Number of rotations for the ROAST experiment-validity test</p>
 <h4 id="minimum-proteins-for-validity-test-min-proteins-for-validity">Minimum Proteins for Validity Test (<code>min_proteins_for_validity</code>)</h4>
@@ -307,6 +320,7 @@
 <p>This plugin includes example data for testing:</p>
 <pre><code class="language-yaml">  abundance_long_file: examples/abundance_long.tsv
   samples_file: examples/samples.tsv
+  peptide_abundance_file: examples/peptide_abundance_long.tsv
 </code></pre>
 <p>Load example data by clicking the <strong>Load Example</strong> button in the UI.</p>
 <h2 id="usage">Usage</h2>
