@@ -61,6 +61,15 @@ inputs:
     step: 0.05
     description: "A peptide needs at least this fraction of replicates present in both the IP and WCL group to be used; only relevant when peptide-level data is given"
 
+  - name: "min_unique_peptides"
+    label: "Minimum Unique Peptides"
+    type: "number"
+    required: false
+    default: 2
+    min: 1
+    step: 1
+    description: "A protein needs at least this many distinct qualifying peptides to be tested; only relevant when peptide-level data is given"
+
   - name: "n_rotations"
     label: "ROAST Rotations"
     type: "number"
@@ -109,6 +118,7 @@ execution:
     peptide_abundance_file: "--peptide_abundance_file"
     impute_method: "--impute_method"
     min_completeness: "--min_completeness"
+    min_unique_peptides: "--min_unique_peptides"
     n_rotations: "--n_rotations"
     min_proteins_for_validity: "--min_proteins_for_validity"
     validity_alpha: "--validity_alpha"
@@ -124,3 +134,4 @@ example:
   values:
     abundance_long_file: "examples/abundance_long.tsv"
     samples_file: "examples/samples.tsv"
+    peptide_abundance_file: "examples/peptide_abundance_long.tsv"

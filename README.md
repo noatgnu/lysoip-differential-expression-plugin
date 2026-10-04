@@ -67,6 +67,7 @@ flowchart TD
 | `peptide_abundance_file` | Peptide Abundance (Long Format) | file | No | - | Always visible |
 | `impute_method` | msqrob2 Imputation Method | select (MinDet (left-censored, recommended for missing-not-at-random), k-nearest neighbours, None (complete-case aggregation only)) | No | MinDet | Always visible |
 | `min_completeness` | Minimum Peptide Completeness | number (min: 0, max: 1, step: 0.05) | No | 0.3 | Always visible |
+| `min_unique_peptides` | Minimum Unique Peptides | number (min: 1, step: 1) | No | 2 | Always visible |
 | `n_rotations` | ROAST Rotations | number (min: 99, step: 1) | No | 1999 | Always visible |
 | `min_proteins_for_validity` | Minimum Proteins for Validity Test | number (min: 1, step: 1) | No | 20 | Always visible |
 | `validity_alpha` | Validity Alpha | number (min: 0, max: 1, step: 0.01) | No | 0.05 | Always visible |
@@ -97,6 +98,11 @@ Only used when peptide-level data is given. MinDet assumes a missing value is ge
 #### Minimum Peptide Completeness (`min_completeness`)
 
 A peptide needs at least this fraction of replicates present in both the IP and WCL group to be used; only relevant when peptide-level data is given
+
+
+#### Minimum Unique Peptides (`min_unique_peptides`)
+
+A protein needs at least this many distinct qualifying peptides to be tested; only relevant when peptide-level data is given
 
 
 #### ROAST Rotations (`n_rotations`)
@@ -143,6 +149,7 @@ This plugin includes example data for testing:
 ```yaml
   abundance_long_file: examples/abundance_long.tsv
   samples_file: examples/samples.tsv
+  peptide_abundance_file: examples/peptide_abundance_long.tsv
 ```
 
 Load example data by clicking the **Load Example** button in the UI.

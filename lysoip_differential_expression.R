@@ -35,6 +35,7 @@ args <- list(
   peptide_abundance_file = params$peptide_abundance_file,
   impute_method = ifelse(is.null(params$impute_method), "MinDet", params$impute_method),
   min_completeness = as.numeric(ifelse(is.null(params$min_completeness), 0.3, params$min_completeness)),
+  min_unique_peptides = as.integer(ifelse(is.null(params$min_unique_peptides), 2, params$min_unique_peptides)),
   n_rotations = as.integer(ifelse(is.null(params$n_rotations), 1999, params$n_rotations)),
   min_proteins_for_validity = as.integer(ifelse(is.null(params$min_proteins_for_validity), 20, params$min_proteins_for_validity)),
   validity_alpha = as.numeric(ifelse(is.null(params$validity_alpha), 0.05, params$validity_alpha)),
@@ -52,6 +53,15 @@ abundance <- merge(abundance, samples[, c("sample", "group")], by = "sample")
 
 gene_by_protein <- unique(abundance[, c("protein", "gene")])
 gene_lookup <- setNames(gene_by_protein$gene, gene_by_protein$protein)
+
+write_empty_differential_output <- function() {
+  write.table(
+    data.frame(protein = character(0), gene = character(0), log2_fold_change = numeric(0),
+               p_value = numeric(0), p_adjusted = numeric(0)),
+    file.path(args$output_folder, "differential_expression.tsv"),
+    sep = "\t", row.names = FALSE, quote = FALSE
+  )
+}
 
 write_validity <- function(n_tested, p_value) {
   is_valid <- NA
@@ -80,12 +90,7 @@ run_limma_path <- function() {
   }
 
   if (length(qualifying) == 0) {
-    write.table(
-      data.frame(protein = character(0), gene = character(0), log2_fold_change = numeric(0),
-                 p_value = numeric(0), p_adjusted = numeric(0)),
-      file.path(args$output_folder, "differential_expression.tsv"),
-      sep = "\t", row.names = FALSE, quote = FALSE
-    )
+    write_empty_differential_output()
     write_validity(0, NA)
     return(invisible(NULL))
   }
@@ -158,12 +163,19 @@ run_msqrob2_path <- function() {
   }
 
   if (length(qualifying) == 0) {
-    write.table(
-      data.frame(protein = character(0), gene = character(0), log2_fold_change = numeric(0),
-                 p_value = numeric(0), p_adjusted = numeric(0)),
-      file.path(args$output_folder, "differential_expression.tsv"),
-      sep = "\t", row.names = FALSE, quote = FALSE
-    )
+    write_empty_differential_output()
+    write_validity(0, NA)
+    return(invisible(NULL))
+  }
+
+  # @step[id=single_feature_gate,from=gate]: Dropping proteins below the minimum unique peptide count
+  protein_by_qualifying_peptide <- unique(peptides[peptides$peptide %in% qualifying, c("peptide", "protein")])
+  peptide_counts <- table(protein_by_qualifying_peptide$protein)
+  qualifying_proteins <- names(peptide_counts[peptide_counts >= args$min_unique_peptides])
+  qualifying <- protein_by_qualifying_peptide$peptide[protein_by_qualifying_peptide$protein %in% qualifying_proteins]
+
+  if (length(qualifying) == 0) {
+    write_empty_differential_output()
     write_validity(0, NA)
     return(invisible(NULL))
   }
