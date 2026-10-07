@@ -1,0 +1,5 @@
+{
+  "abundance_long_file": "examples/abundance_long.tsv",
+  "samples_file": "examples/samples.tsv",
+  "peptide_abundance_file": "examples/peptide_abundance_long.tsv"
+}
