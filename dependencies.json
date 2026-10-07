@@ -1,0 +1,609 @@
+{
+  "generatedAt": "2026-10-07T14:48:33Z",
+  "packages": [
+    {
+      "name": "statmod",
+      "version": "1.5.2",
+      "repository": "standard"
+    },
+    {
+      "name": "jsonlite",
+      "version": "2.0.0",
+      "repository": "any"
+    },
+    {
+      "name": "abind",
+      "version": "1.4-8",
+      "repository": "standard"
+    },
+    {
+      "name": "askpass",
+      "version": "1.2.1",
+      "repository": "standard"
+    },
+    {
+      "name": "base64enc",
+      "version": "0.1-6",
+      "repository": "standard"
+    },
+    {
+      "name": "bslib",
+      "version": "0.12.0",
+      "repository": "standard"
+    },
+    {
+      "name": "cachem",
+      "version": "1.1.0",
+      "repository": "standard"
+    },
+    {
+      "name": "cli",
+      "version": "3.6.6",
+      "repository": "standard"
+    },
+    {
+      "name": "clue",
+      "version": "0.3-68",
+      "repository": "standard"
+    },
+    {
+      "name": "cluster",
+      "version": "2.1.8.3",
+      "repository": "standard"
+    },
+    {
+      "name": "crosstalk",
+      "version": "1.2.2",
+      "repository": "standard"
+    },
+    {
+      "name": "curl",
+      "version": "8.0.0",
+      "repository": "standard"
+    },
+    {
+      "name": "data.table",
+      "version": "1.18.6.1",
+      "repository": "standard"
+    },
+    {
+      "name": "digest",
+      "version": "0.6.39",
+      "repository": "standard"
+    },
+    {
+      "name": "dplyr",
+      "version": "1.2.1",
+      "repository": "standard"
+    },
+    {
+      "name": "evaluate",
+      "version": "1.0.5",
+      "repository": "standard"
+    },
+    {
+      "name": "farver",
+      "version": "2.1.2",
+      "repository": "standard"
+    },
+    {
+      "name": "fastmap",
+      "version": "1.2.0",
+      "repository": "standard"
+    },
+    {
+      "name": "fontawesome",
+      "version": "0.5.3",
+      "repository": "standard"
+    },
+    {
+      "name": "fs",
+      "version": "2.1.0",
+      "repository": "standard"
+    },
+    {
+      "name": "generics",
+      "version": "0.1.4",
+      "repository": "standard"
+    },
+    {
+      "name": "ggplot2",
+      "version": "4.0.3",
+      "repository": "standard"
+    },
+    {
+      "name": "glue",
+      "version": "1.8.1",
+      "repository": "standard"
+    },
+    {
+      "name": "gtable",
+      "version": "0.3.6",
+      "repository": "standard"
+    },
+    {
+      "name": "highr",
+      "version": "0.12",
+      "repository": "standard"
+    },
+    {
+      "name": "htmltools",
+      "version": "0.5.9",
+      "repository": "standard"
+    },
+    {
+      "name": "htmlwidgets",
+      "version": "1.6.4",
+      "repository": "standard"
+    },
+    {
+      "name": "httr",
+      "version": "1.4.9",
+      "repository": "standard"
+    },
+    {
+      "name": "igraph",
+      "version": "2.3.4",
+      "repository": "standard"
+    },
+    {
+      "name": "isoband",
+      "version": "0.3.0",
+      "repository": "standard"
+    },
+    {
+      "name": "jquerylib",
+      "version": "0.1.4",
+      "repository": "standard"
+    },
+    {
+      "name": "knitr",
+      "version": "1.52",
+      "repository": "standard"
+    },
+    {
+      "name": "labeling",
+      "version": "0.4.3",
+      "repository": "standard"
+    },
+    {
+      "name": "later",
+      "version": "1.4.8",
+      "repository": "standard"
+    },
+    {
+      "name": "lattice",
+      "version": "0.23-1",
+      "repository": "standard"
+    },
+    {
+      "name": "lazyeval",
+      "version": "0.2.3",
+      "repository": "standard"
+    },
+    {
+      "name": "lifecycle",
+      "version": "1.0.5",
+      "repository": "standard"
+    },
+    {
+      "name": "magrittr",
+      "version": "2.0.5",
+      "repository": "standard"
+    },
+    {
+      "name": "MASS",
+      "version": "7.3-66",
+      "repository": "standard"
+    },
+    {
+      "name": "Matrix",
+      "version": "1.7-6",
+      "repository": "standard"
+    },
+    {
+      "name": "matrixStats",
+      "version": "1.5.0",
+      "repository": "standard"
+    },
+    {
+      "name": "memoise",
+      "version": "2.0.1",
+      "repository": "standard"
+    },
+    {
+      "name": "mime",
+      "version": "0.13",
+      "repository": "standard"
+    },
+    {
+      "name": "openssl",
+      "version": "2.4.2",
+      "repository": "standard"
+    },
+    {
+      "name": "otel",
+      "version": "0.2.0",
+      "repository": "standard"
+    },
+    {
+      "name": "pillar",
+      "version": "1.11.1",
+      "repository": "standard"
+    },
+    {
+      "name": "pkgconfig",
+      "version": "2.0.3",
+      "repository": "standard"
+    },
+    {
+      "name": "plotly",
+      "version": "4.12.1",
+      "repository": "standard"
+    },
+    {
+      "name": "plyr",
+      "version": "1.8.9",
+      "repository": "standard"
+    },
+    {
+      "name": "promises",
+      "version": "1.5.0",
+      "repository": "standard"
+    },
+    {
+      "name": "purrr",
+      "version": "1.2.2",
+      "repository": "standard"
+    },
+    {
+      "name": "R6",
+      "version": "2.6.1",
+      "repository": "standard"
+    },
+    {
+      "name": "rappdirs",
+      "version": "0.3.4",
+      "repository": "standard"
+    },
+    {
+      "name": "RColorBrewer",
+      "version": "1.1-3",
+      "repository": "standard"
+    },
+    {
+      "name": "Rcpp",
+      "version": "1.1.2",
+      "repository": "standard"
+    },
+    {
+      "name": "reshape2",
+      "version": "1.4.5",
+      "repository": "standard"
+    },
+    {
+      "name": "rlang",
+      "version": "1.3.0",
+      "repository": "standard"
+    },
+    {
+      "name": "rmarkdown",
+      "version": "2.32",
+      "repository": "standard"
+    },
+    {
+      "name": "S7",
+      "version": "0.2.2",
+      "repository": "standard"
+    },
+    {
+      "name": "sass",
+      "version": "0.4.10",
+      "repository": "standard"
+    },
+    {
+      "name": "scales",
+      "version": "1.4.0",
+      "repository": "standard"
+    },
+    {
+      "name": "stringi",
+      "version": "1.8.9",
+      "repository": "standard"
+    },
+    {
+      "name": "stringr",
+      "version": "1.6.0",
+      "repository": "standard"
+    },
+    {
+      "name": "sys",
+      "version": "3.4.3",
+      "repository": "standard"
+    },
+    {
+      "name": "tibble",
+      "version": "3.3.1",
+      "repository": "standard"
+    },
+    {
+      "name": "tidyr",
+      "version": "1.3.2",
+      "repository": "standard"
+    },
+    {
+      "name": "tidyselect",
+      "version": "1.2.1",
+      "repository": "standard"
+    },
+    {
+      "name": "tinytex",
+      "version": "0.61",
+      "repository": "standard"
+    },
+    {
+      "name": "utf8",
+      "version": "1.2.6",
+      "repository": "standard"
+    },
+    {
+      "name": "vctrs",
+      "version": "0.7.3",
+      "repository": "standard"
+    },
+    {
+      "name": "viridisLite",
+      "version": "0.4.3",
+      "repository": "standard"
+    },
+    {
+      "name": "withr",
+      "version": "3.0.3",
+      "repository": "standard"
+    },
+    {
+      "name": "xfun",
+      "version": "0.61",
+      "repository": "standard"
+    },
+    {
+      "name": "yaml",
+      "version": "2.3.12",
+      "repository": "standard"
+    },
+    {
+      "name": "AnnotationFilter",
+      "version": "1.36.0",
+      "repository": "standard"
+    },
+    {
+      "name": "Biobase",
+      "version": "2.72.0",
+      "repository": "standard"
+    },
+    {
+      "name": "BiocBaseUtils",
+      "version": "1.14.2",
+      "repository": "standard"
+    },
+    {
+      "name": "BiocGenerics",
+      "version": "0.58.1",
+      "repository": "standard"
+    },
+    {
+      "name": "DelayedArray",
+      "version": "0.38.2",
+      "repository": "standard"
+    },
+    {
+      "name": "GenomicRanges",
+      "version": "1.64.0",
+      "repository": "standard"
+    },
+    {
+      "name": "IRanges",
+      "version": "2.46.0",
+      "repository": "standard"
+    },
+    {
+      "name": "MatrixGenerics",
+      "version": "1.24.0",
+      "repository": "standard"
+    },
+    {
+      "name": "MsCoreUtils",
+      "version": "1.24.0",
+      "repository": "standard"
+    },
+    {
+      "name": "MultiAssayExperiment",
+      "version": "1.38.0",
+      "repository": "standard"
+    },
+    {
+      "name": "ProtGenerics",
+      "version": "1.44.0",
+      "repository": "standard"
+    },
+    {
+      "name": "QFeatures",
+      "version": "1.22.0",
+      "repository": "any"
+    },
+    {
+      "name": "S4Arrays",
+      "version": "1.12.1",
+      "repository": "standard"
+    },
+    {
+      "name": "S4Vectors",
+      "version": "0.50.3",
+      "repository": "standard"
+    },
+    {
+      "name": "Seqinfo",
+      "version": "1.2.0",
+      "repository": "standard"
+    },
+    {
+      "name": "SparseArray",
+      "version": "1.12.3",
+      "repository": "standard"
+    },
+    {
+      "name": "SummarizedExperiment",
+      "version": "1.42.0",
+      "repository": "standard"
+    },
+    {
+      "name": "XVector",
+      "version": "0.52.0",
+      "repository": "standard"
+    },
+    {
+      "name": "assertthat",
+      "version": "0.2.1",
+      "repository": "standard"
+    },
+    {
+      "name": "formatR",
+      "version": "1.14",
+      "repository": "standard"
+    },
+    {
+      "name": "futile.logger",
+      "version": "1.4.9",
+      "repository": "standard"
+    },
+    {
+      "name": "futile.options",
+      "version": "1.0.1",
+      "repository": "standard"
+    },
+    {
+      "name": "lambda.r",
+      "version": "1.2.4",
+      "repository": "standard"
+    },
+    {
+      "name": "lme4",
+      "version": "2.0-6",
+      "repository": "standard"
+    },
+    {
+      "name": "minqa",
+      "version": "1.2.8",
+      "repository": "standard"
+    },
+    {
+      "name": "nlme",
+      "version": "3.1-171",
+      "repository": "standard"
+    },
+    {
+      "name": "nloptr",
+      "version": "2.2.1",
+      "repository": "standard"
+    },
+    {
+      "name": "rbibutils",
+      "version": "2.4.1",
+      "repository": "standard"
+    },
+    {
+      "name": "Rdpack",
+      "version": "2.6.6",
+      "repository": "standard"
+    },
+    {
+      "name": "reformulas",
+      "version": "0.4.4",
+      "repository": "standard"
+    },
+    {
+      "name": "snow",
+      "version": "0.4-4",
+      "repository": "standard"
+    },
+    {
+      "name": "BiocParallel",
+      "version": "1.46.0",
+      "repository": "standard"
+    },
+    {
+      "name": "limma",
+      "version": "3.68.5",
+      "repository": "standard"
+    },
+    {
+      "name": "msqrob2",
+      "version": "1.20.0",
+      "repository": "any"
+    },
+    {
+      "name": "boot",
+      "version": "1.3-32",
+      "repository": "installed"
+    },
+    {
+      "name": "codetools",
+      "version": "0.2-20",
+      "repository": "installed"
+    }
+  ],
+  "systemRequirements": {
+    "darwin": [],
+    "linux": [
+      {
+        "name": "cmake",
+        "packages": [
+          "fs",
+          "nloptr"
+        ]
+      },
+      {
+        "name": "glpk",
+        "packages": "igraph"
+      },
+      {
+        "name": "gnumake",
+        "packages": [
+          "fs",
+          "sass",
+          "minqa"
+        ]
+      },
+      {
+        "name": "libcurl",
+        "packages": "curl"
+      },
+      {
+        "name": "libicu",
+        "packages": "stringi"
+      },
+      {
+        "name": "libuv",
+        "packages": "fs"
+      },
+      {
+        "name": "libxml2",
+        "packages": "igraph"
+      },
+      {
+        "name": "openssl",
+        "packages": [
+          "curl",
+          "openssl"
+        ]
+      },
+      {
+        "name": "pandoc",
+        "packages": [
+          "knitr",
+          "rmarkdown"
+        ]
+      }
+    ]
+  }
+}
